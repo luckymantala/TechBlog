@@ -34,4 +34,10 @@ public class Helper {
 	public static String getProfileName(String profile, int userID) {
 		return profile.replace(".", "_" + userID + ".");
 	}
+	
+	public static String getPostThumbnailName(String profile, String dateTime) {
+		return profile.replace(".", "_" + dateTime + ".");
+	}
+	
+	
 }

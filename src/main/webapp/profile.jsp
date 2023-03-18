@@ -1,4 +1,8 @@
 
+<%@page import="io.tech.blog.entities.Post"%>
+<%@page import="io.tech.blog.entities.Category"%>
+<%@page import="io.tech.blog.helper.ConnectionProvider"%>
+<%@page import="io.tech.blog.dao.PostDao"%>
 <%@ page import="io.tech.blog.entities.User"%>
 <%@ page errorPage="error_page.jsp"%>
 <%@ page import="io.tech.blog.entities.Message"%>
@@ -7,6 +11,8 @@ User user = (User) session.getAttribute("user");
 if (user == null) {
 	response.sendRedirect("login_page.jsp");
 }
+
+PostDao postDao = new PostDao(ConnectionProvider.getConnection());
 %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -70,7 +76,8 @@ if (user == null) {
 						class="	fa fa-address-book"></span> Contact
 				</a></li>
 
-				<li class="nav-item"><a class="nav-link" data-target="#post-form-modal" data-toggle="modal"
+				<li class="nav-item"><a class="nav-link"
+					data-target="#post-form-modal" data-toggle="modal"
 					href="#<!-- constact_page.jsp -->"> <span
 						class="	fa fa-address-book"></span> Do Post
 				</a></li>
@@ -95,10 +102,53 @@ if (user == null) {
 	</nav>
 
 	<!-- navbar ends  -->
+	<!-- Main body -->
+
+	<main>
+		<div class="container">
+			<div class="row mt-4">
+
+				<div class="col-md-4">
+					<!-- category list section  -->
+
+					<ul class="list-group">
+						<li class="c-link list-group-item list-group-item-action active" onclick="doPost(0,this)">All
+							Posts</li>
+						<%
+						for (Category category : postDao.getAllCategories()) {
+						%>
+						<li class="c-link list-group-item list-group-item-action"
+							onclick="doPost(<%=category.getCatID()%>,this)"><%=category.getCatName()%></li>
+						<%
+						}
+						%>
+					</ul>
+
+				</div>
+
+				<div class="col-md-8">
+					<!-- posts list section  -->
+					<div class="container text-center" id="loader">
+						<span class="fa fa-refresh fa-4x fa-spin"></span>
+						<h5>Loading...</h5>
+					</div>
+
+					<div class="container-fluid" id="post-container"></div>
+
+
+
+				</div>
+
+
+			</div>
+		</div>
+	</main>
+
+	<!-- Main body ends  -->
 
 	<!-- Modal - Posts -->
-	<div class="modal fade" id="post-form-modal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="post-form-modal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -109,50 +159,62 @@ if (user == null) {
 					</button>
 				</div>
 				<div class="modal-body">
-				
-					<form action="PostServlet" method="post">
-						
+
+					<form action="dopost" method="post" id="post-form">
+
 						<div class="form-group">
-						<select class="form-control"> 
-							<option selected disabled>---Select Categoty---</option>
-							<option>Java</option>
-						</select>
+							<select class="form-control" name="post-catergory">
+								<option selected disabled>---Select Categoty---</option>
+								<%
+								for (Category category : postDao.getAllCategories()) {
+								%>
+								<option value="<%=category.getCatID()%>"><%=category.getCatName()%></option>
+								<%
+								}
+								%>
+
+							</select>
 						</div>
-						
-						
+
+
 						<div class="form-group">
-							<input type="text" placeholder="Enter post title" class="form-control">
+							<input name="post-title" type="text"
+								placeholder="Enter post title" class="form-control">
 						</div>
-						
+
 						<div class="form-group">
-							<textarea placeholder="Start writing post..." rows="10" class="form-control" style="resize: none;"></textarea>
+							<textarea name="post-content" placeholder="Start writing post..."
+								rows="10" class="form-control" style="resize: none;"></textarea>
 						</div>
-						
+
 						<div class="form-group">
-							<textarea placeholder="Enter your code here..." rows="6" class="form-control" style="resize: none;"></textarea>
+							<textarea name="post-code" placeholder="Enter your code here..."
+								rows="6" class="form-control" style="resize: none;"></textarea>
 						</div>
-						
+
 						<div class="form-group">
-							<label for="img-select">Choose an image for the post</label>
-							<input id="img-select" type="file" class="form-control-file">
+							<label for="img-select">Choose an image for the post</label> <input
+								name="post-img" id="img-select" type="file"
+								class="form-control-file">
 						</div>
-						
+
 						<div class="form-group">
-							<input type="text" placeholder="Add tags(comma seperated)" class="form-control">
+							<input type="text" placeholder="Add tags(comma seperated)"
+								name="post-tags" class="form-control">
 						</div>
-						
+
 						<div class="text-center">
 							<button type="submit" class="btn btn-primary">Submit</button>
 						</div>
-						
+
 					</form>
-					
+
 				</div>
-				<div class="modal-footer">
+				<!-- <div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -293,7 +355,8 @@ if (user == null) {
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/actions.js"></script>
+
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -330,6 +393,80 @@ if (user == null) {
 	}
 	%>
 
+
+	<!-- send post to servlet using ajax  -->
+	<script>
+		$(document).ready(function() {
+
+			$("#post-form").on('submit', function(event) {
+				event.preventDefault();
+				
+				// var f = $(this).serialize();
+				let f = new FormData(this);
+				console.log(f);
+			/* 	$(".loader").show();
+				$(".submit").hide() */;
+
+				$.ajax({
+					url : "dopost",
+					data : f,
+					type : "post",
+					success : function(data, textStatus, jqXHR) {
+						console.log(data)
+						/* $(".loader").hide();
+						$(".submit").show(); */
+
+						if (data.trim() == "done") {
+							swal("Good job!", "You clicked the button!", "success");
+						} else {
+							swal("Oops", "Something went wrong!", "error");
+						}
+					},
+					error : function(jqHXR, textStatus, errorThrown) {
+						swal("Oops", "Something went wrong!", "error");
+					},
+					processData: false,
+					contentType: false
+				})
+			})
+		})
+	</script>
+
+
+	<script type="text/javascript">
+		
+	//updating posts using ajax  
+	function doPost(catID, temp) {
+		
+		$('.c-link').removeClass('active');
+		
+		$.ajax({
+			url: "posts_page.jsp",
+			/* data : f, */
+			/* type : "post", */
+			data: {cid:catID},
+			success: function(data, textStatus, jqXHR) {
+				/* console.log(data); */
+				$("#loader").hide();
+				$("#post-container").html(data);
+				$(temp).addClass('active');
+			},
+			error: function(jqHXR, textStatus, errorThrown) {
+				console.log(errorThrown)
+			},
+		})
+	}
+
+	$(document).ready(function() {
+		console.log("page loaded")
+		
+		allPostLink = $('.c-link')[0];
+		doPost(0,allPostLink);
+
+	})
+
+	
+	</script>
 
 </body>
 </html>

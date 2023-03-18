@@ -1,7 +1,15 @@
+<%@page import="io.tech.blog.entities.Post"%>
+<%@page import="io.tech.blog.dao.PostDao"%>
+<%@page import="io.tech.blog.entities.User"%>
 <%@page import="io.tech.blog.helper.ConnectionProvider"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*"%>
+
+<%
+User user_index = (User) session.getAttribute("user");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,9 +24,9 @@
 <link href="css/style.css" rel="stylesheet" type="text/css">
 
 <style type="text/css">
-	.banner-background{
-		clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 100%, 65% 86%, 27% 93%, 0 86%, 0 0);
-	}
+.banner-background {
+	clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 100%, 65% 86%, 27% 93%, 0 86%, 0 0);
+}
 </style>
 
 </head>
@@ -39,8 +47,8 @@
 				<button class="btn btn-outline-dark">
 					<span class="fa fa-user-plus"></span> Start, Its Free!
 				</button>
-				<a href="login_page.jsp" class="btn btn-outline-dark">
-					<span class="fa fa-user-circle fa-spin"> </span> Login
+				<a href="login_page.jsp" class="btn btn-outline-dark"> <span
+					class="fa fa-user-circle fa-spin"> </span> Login
 				</a>
 
 			</div>
@@ -54,13 +62,50 @@
 	<div class="container">
 
 		<div class="row mb-3">
-			<div class="col-md-4">
+
+
+			<%
+			PostDao postDao = new PostDao(ConnectionProvider.getConnection());
+			int cnt = 0;
+			for (Post post : postDao.getAllPosts()) {
+				if (cnt <= 4) {
+			%>
+			<div class="col-md-4 my-2">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title text-truncate"><%=post.getpTitle()%></h5>
+						<p class="card-text text-truncate"><%=post.getpContent()%></p>
+						<%
+						if (user_index != null) {
+						%>
+						<a href="#" class="btn primary-background text-white">Read
+							More</a>
+
+						<%
+						}
+						%>
+					</div>
+				</div>
+			</div>
+			<%
+			cnt++;
+			}
+			}
+			%>
+			
+			<div class="col-md-4 text-center">
+				<a href="profile.jsp">More</a>
+			</div>
+			
+			
+			<!-- <div class="col-md-4">
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title">Java Programming</h5>
 						<p class="card-text">Some quick example text to build on the
 							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read More</a>
+						<a href="#" class="btn primary-background text-white">Read
+							More</a>
 					</div>
 				</div>
 			</div>
@@ -70,17 +115,8 @@
 						<h5 class="card-title">Java Programming</h5>
 						<p class="card-text">Some quick example text to build on the
 							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read More</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Java Programming</h5>
-						<p class="card-text">Some quick example text to build on the
-							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read More</a>
+						<a href="#" class="btn primary-background text-white">Read
+							More</a>
 					</div>
 				</div>
 			</div>
@@ -93,7 +129,8 @@
 						<h5 class="card-title">Java Programming</h5>
 						<p class="card-text">Some quick example text to build on the
 							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read More</a>
+						<a href="#" class="btn primary-background text-white">Read
+							More</a>
 					</div>
 				</div>
 			</div>
@@ -103,7 +140,8 @@
 						<h5 class="card-title">Java Programming</h5>
 						<p class="card-text">Some quick example text to build on the
 							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read More</a>
+						<a href="#" class="btn primary-background text-white">Read
+							More</a>
 					</div>
 				</div>
 			</div>
@@ -113,13 +151,14 @@
 						<h5 class="card-title">Java Programming</h5>
 						<p class="card-text">Some quick example text to build on the
 							card title and make up the bulk of the card's content.</p>
-						<a href="#" class="btn primary-background text-white">Read More</a>
+						<a href="#" class="btn primary-background text-white">Read
+							More</a>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
-		
+
 
 	</div>
 

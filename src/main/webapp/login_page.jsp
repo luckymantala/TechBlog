@@ -1,6 +1,15 @@
+<%@page import="io.tech.blog.entities.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="io.tech.blog.entities.Message"%>
+
+<%
+	
+	User user = (User)session.getAttribute("user");
+	if(user != null) {
+		response.sendRedirect("profile.jsp");
+	}
+%>
 
 <!DOCTYPE html>
 <html>

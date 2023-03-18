@@ -53,7 +53,27 @@
 		<servlet-name>Updatedetails</servlet-name>
 		<url-pattern>/updateDetails</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Post</servlet-name>
+		<servlet-class>io.tech.blog.servlet.PostServlet</servlet-class>	
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Post</servlet-name>
+		<url-pattern>/dopost</url-pattern>
+	</servlet-mapping>
 
+
+	<servlet>
+		<servlet-name>LikeServlet</servlet-name>
+		<servlet-class>io.tech.blog.servlet.LikeServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>LikeServlet</servlet-name>
+		<url-pattern>/likeservlet</url-pattern>
+	</servlet-mapping>
 
 	<!-- <filter> <filter-name>nocache</filter-name> <filter-class>io.tech.blog.filters.NoCacheFilter</filter-class> 
 		</filter> <filter-mapping> <filter-name>nocache</filter-name> <url-pattern>/profile.jsp</url-pattern> 

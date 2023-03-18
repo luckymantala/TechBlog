@@ -58,7 +58,7 @@ public class UserDao {
 			
 			if(rs.next()) {
 				user = new User();
-				user.setId(rs.getInt("id"));
+				user.setId(rs.getInt("uid"));
 				user.setName(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
 				user.setPassword(rs.getString("password"));
@@ -81,7 +81,7 @@ public class UserDao {
 		
 		try {
 			
-			String query = "UPDATE userdetails SET name =?, email =?, about =?, profile =? WHERE id =?;";			 
+			String query = "UPDATE userdetails SET name =?, email =?, about =?, profile =? WHERE uid =?;";			 
 			PreparedStatement psmt = con.prepareStatement(query);
 			
 			psmt.setString(1, user.getName());
