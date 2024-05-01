@@ -1,11 +1,13 @@
 package io.tech.blog.servlet;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
 
 import io.tech.blog.dao.LikeDao;
 import io.tech.blog.helper.ConnectionProvider;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class LikeServlet extends HttpServlet{
 
